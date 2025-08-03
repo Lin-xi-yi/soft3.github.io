@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a2a6c">
+  <title>真心话大冒险 - 多模式升级版</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      z-index: -1;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .header h1 {
+      color: #1a2a6c;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      display: inline-block;
+    }
+
+    .header h1::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #4CAF50, #FFC107, #f44336);
+      border-radius: 2px;
+    }
+
+    .header p {
+      color: #666;
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 15px auto;
+      line-height: 1.6;
+    }
+
+    .mode-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+      flex-wrap: wrap;
+    }
+
+    .mode-indicator {
+      padding: 6px 15px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      cursor: default;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .mode-indicator.active {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    .easy-indicator {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+      color: white;
+    }
+
+    .normal-indicator {
+      background: linear-gradient(45deg, #FFC107, #FF9800);
+      color: white;
+    }
+
+    .hard-indicator {
+      background: linear-gradient(45deg, #f44336, #e53935);
+      color: white;
+    }
+
+    .question-box {
+      background: white;
+      padding: 25px 15px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      margin-bottom: 25px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      text-align: center;
+      position: relative;
+      border: 2px dashed #eee;
+      transition: all 0.3s ease;
+    }
+
+    .question-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .question-box::before {
+      content: ""attr(data-mode)"";
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      background: #1a2a6c;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .settings {
+      background: rgba(245, 245, 245, 0.8);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .settings label {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .timer-input {
+      width: 60px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: center;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .timer {
+      color: #333;
+      font-weight: bold;
+      font-size: 1.1rem;
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      min-width: 90px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .timer.warning {
+      background: #FFF9C4;
+      color: #F57C00;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 14px 15px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      font-weight: bold;
+      min-width: 45%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      touch-action: manipulation;
+    }
+
+    button i {
+      font-size: 1.1rem;
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    button:hover::after {
+      opacity: 1;
+    }
+
+    button:hover, button:focus {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      outline: none;
+    }
+
+    button:active {
+      transform: translateY(2px);
+    }
+
+    .truth {
+      background: linear-gradient(45deg, #4CAF50, #2E7D32);
+      color: white;
+    }
+
+    .dare {
+      background: linear-gradient(45deg, #f44336, #c62828);
+      color: white;
+    }
+
+    .easy {
+      background: linear-gradient(45deg, #2196F3, #1976D2);
+      color: white;
+    }
+
+    .normal {
+      background: linear-gradient(45deg, #FFC107, #FF9800);
+      color: white;
+    }
+
+    .hard {
+      background: linear-gradient(45deg, #9C27B0, #7B1FA2);
+      color: white;
+    }
+
+    .history-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    .history-link {
+      background: linear-gradient(45deg, #1a2a6c, #1a237e);
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      min-height: 48px;
+      touch-action: manipulation;
+    }
+
+    .history-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      background: linear-gradient(45deg, #2a3a8c, #2a2f9e);
+    }
+
+    .history-panel {
+      position: fixed;
+      right: -100%;
+      top: 0;
+      width: 100%;
+      max-width: 350px;
+      height: 100vh;
+      background: white;
+      box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+      padding: 20px;
+      transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .history-panel.active {
+      right: 0;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .history-header h3 {
+      color: #1a2a6c;
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .close-history {
+      background: #f5f5f5;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .close-history:hover {
+      background: #e0e0e0;
+      transform: rotate(90deg);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .history-item {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 25px;
+      transition: background 0.2s ease;
+    }
+
+    .history-item:hover {
+      background: #f9f9f9;
+    }
+
+    .history-item::before {
+      content: "•";
+      position: absolute;
+      left: 10px;
+      top: 12px;
+      color: #1a2a6c;
+      font-size: 1.2rem;
+    }
+
+    .history-item:nth-child(2n)::before {
+      color: #f44336;
+    }
+
+    .history-item:nth-child(3n)::before {
+      color: #4CAF50;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .mode-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+
+    .tag-truth {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .tag-dare {
+      background: #f44336;
+      color: white;
+    }
+
+    .tag-easy {
+      background: #2196F3;
+      color: white;
+    }
+
+    .tag-normal {
+      background: #FFC107;
+      color: white;
+    }
+
+    .tag-hard {
+      background: #9C27B0;
+      color: white;
+    }
+
+    @keyframes questionIn {
+      0% { transform: scale(0.8) rotate(-2deg); opacity: 0; }
+      50% { transform: scale(1.05) rotate(1deg); }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+
+    .question-animation {
+      animation: questionIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* 针对安卓手机的特殊适配 */
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+        min-height: -webkit-fill-available;
+      }
+
+      .container {
+        padding: 15px;
+        height: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        border-radius: 15px;
+      }
+
+      .header h1 {
+        font-size: 1.6rem;
+      }
+
+      .question-box {
+        min-height: 180px;
+        padding: 20px 15px;
+        margin-bottom: 20px;
+        flex-grow: 1;
+        align-items: center;
+      }
+
+      .buttons {
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      button {
+        min-width: 45%;
+        padding: 12px 10px;
+        font-size: 0.9rem;
+      }
+
+      .history-panel {
+        max-width: 100%;
+      }
+
+      .mode-indicators {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .mode-indicator {
+        font-size: 0.75rem;
+        padding: 5px 12px;
+        flex: 1;
+        min-width: 30%;
+        text-align: center;
+      }
+
+      .timer {
+        font-size: 1rem;
+        padding: 6px 10px;
+      }
+    }
+
+    /* 针对小屏安卓手机的适配 */
+    @media (max-width: 360px) {
+      .header h1 {
+        font-size: 1.4rem;
+      }
+
+      .question-box {
+        font-size: 1rem;
+        min-height: 160px;
+      }
+
+      button {
+        min-width: 100%;
+        font-size: 0.9rem;
+      }
+
+      .settings {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .settings label {
+        order: 1;
+      }
+
+      .timer-input {
+        order: 2;
+        width: 100%;
+      }
+
+      .timer {
+        order: 3;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1><i class="fas fa-gamepad"></i> 真心话大冒险</h1>
+    <p>聚会必备游戏！选择不同模式获取问题，简单模式轻松有趣，地狱模式刺激挑战，留下难忘的聚会回忆！</p>
+
+    <!--    <div class="mode-indicators">
+          <div class="mode-indicator easy-indicator">简单模式 - 轻松有趣</div>
+          <div class="mode-indicator normal-indicator">一般模式 - 中等挑战</div>
+          <div class="mode-indicator hard-indicator active">地狱模式 - 刺激冒险</div>
+        </div>-->
+  </div>
+
+  <div class="settings">
+    <label>
+      <input type="checkbox" id="timerEnabled" checked> 启用倒计时
+    </label>
+    <input type="number" id="timerDuration" class="timer-input" value="30" min="5" max="120">
+    <span>秒</span>
+    <div class="timer" id="timer">00:30</div>
+  </div>
+
+  <div class="question-box" id="question" data-mode="地狱模式">
+    点击下方按钮开始游戏，挑战不同模式！
+  </div>
+
+  <div class="buttons">
+    <button class="truth" onclick="getQuestion('truth')">
+      <i class="fas fa-heart"></i> 真心话
+    </button>
+    <button class="dare" onclick="getQuestion('dare')">
+      <i class="fas fa-fire"></i> 大冒险
+    </button>
+    <button class="easy" onclick="getQuestion('easy')">
+      <i class="fas fa-smile"></i> 简单模式
+    </button>
+    <button class="normal" onclick="getQuestion('normal')">
+      <i class="fas fa-meh"></i> 一般模式
+    </button>
+    <button class="hard" onclick="getQuestion('hard')">
+      <i class="fas fa-skull"></i> 地狱模式
+    </button>
+  </div>
+
+  <div class="history-container">
+    <a href="#" class="history-link" onclick="toggleHistory(event)">
+      <i class="fas fa-history"></i> 查看历史记录
+    </a>
+  </div>
+</div>
+
+<div class="history-panel" id="historyPanel">
+  <div class="history-header">
+    <h3><i class="fas fa-history"></i> 游戏历史记录</h3>
+    <button class="close-history" onclick="toggleHistory(event)">×</button>
+  </div>
+  <div id="history"></div>
+</div>
+
+<script>
+  // 模拟点击音效 - 适配移动设备
+  function playClick() {
+    // 降低音效复杂度，提高移动设备性能
+    try {
+      const context = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = context.createOscillator();
+      const gainNode = context.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(context.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 523.25; // C5
+      gainNode.gain.value = 0.2; // 降低音量
+
+      oscillator.start();
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.1);
+
+      setTimeout(() => {
+        oscillator.stop();
+      }, 100);
+    } catch(e) {
+      // 静音失败的情况
+    }
+  }
+
+  // 问题库
+  const truthQuestions = [
+    "你最后一次说谎是什么时候？",
+    "你最难忘的一次旅行是哪次？",
+    "你最喜欢的一首歌是什么？",
+    "你最想感谢的人是谁？为什么？",
+    "你最后悔的一件事是什么？",
+    "你最大的梦想是什么？",
+    "你第一次恋爱是什么时候？",
+    "你最害怕什么？",
+    "如果可以重来，你最想改变什么？",
+    "你认为自己最大的优点是什么？"
+  ];
+
+  const dareQuestions = [
+    "模仿一种动物叫声",
+    "唱一首歌的副歌部分",
+    "做一个鬼脸",
+    "学猫叫三声",
+    "即兴跳舞30秒",
+    "模仿在场一个人的说话方式",
+    "用夸张的表情讲述今天发生的一件事",
+    "做三个俯卧撑",
+    "闭着眼睛画一只猫",
+    "用rap方式介绍自己"
+  ];
+
+  // 新增模式问题库
+  const easyQuestions = [
+    "情感挖掘机：最近一次让你心跳加速（小鹿乱撞）的时刻是因为什么事/什么人？",
+    "后悔坦白局：你说过最后悔的一句话是什么？现在想对听到的人说什么？",
+    "社死回忆：你做过最“脚趾抠地”的尴尬事是什么？（求细节！）"
+  ];
+
+  const normalQuestions = [
+    "秘密技能：你有什么不为人知的“奇怪特长”？比如动耳朵、舌头卷成花…",
+    "灵魂拷问：如果在场的人中必须选一个和你荒岛求生，你会选谁？为什么？（损友预警！）",
+    "沉浸式表演：用三种不同语气说：“人家拿小拳拳捶你胸口！”（撒娇/愤怒/机器人）"
+  ];
+
+  const hardQuestions = [
+    "综艺附体：原地模仿一个经典表情包动作（比如“地铁老人看手机”），让大家猜！",
+    "土味情话王：挑一位异性（或同性），用油腻霸总口吻说：“女人/男人，你成功引起了我的注意！”",
+    "方言暴击：用家乡方言大声朗读：“红鲤鱼与绿鲤鱼与驴”（不会？现学！）",
+    "灵魂画手：蒙眼画出一只猪，并命名为“在场某人的昵称+猪”！（例：《小明的飞天猪》）"
+  ];
+
+  let timerInterval;
+  const history = [];
+
+  // 优化触摸体验 - 防止双击缩放
+  document.addEventListener('dblclick', function(event) {
+    event.preventDefault();
+  }, { passive: false });
+
+  function getQuestion(type) {
+    playClick();
+
+    let questions, modeName;
+    switch(type) {
+      case 'truth':
+        questions = truthQuestions;
+        modeName = "真心话";
+        break;
+      case 'dare':
+        questions = dareQuestions;
+        modeName = "大冒险";
+        break;
+      case 'easy':
+        questions = easyQuestions;
+        modeName = "简单";
+        break;
+      case 'normal':
+        questions = normalQuestions;
+        modeName = "一般";
+        break;
+      case 'hard':
+        questions = hardQuestions;
+        modeName = "地狱";
+        break;
+      default:
+        questions = truthQuestions;
+        modeName = "真心话";
+    }
+
+    const randomIndex = Math.floor(Math.random() * questions.length);
+    const question = questions[randomIndex];
+
+    const questionBox = document.getElementById('question');
+    questionBox.dataset.mode = modeName + "模式";
+
+    // 添加动画类
+    questionBox.classList.remove('question-animation');
+    setTimeout(() => {
+      questionBox.classList.add('question-animation');
+    }, 10);
+
+    questionBox.textContent = question;
+
+    // 添加到历史记录
+    addToHistory(question, type);
+
+    // 更新模式指示器
+    updateModeIndicator(type);
+
+    // 如果启用了倒计时，开始计时
+    if (document.getElementById('timerEnabled').checked) {
+      startTimer();
+    }
+  }
+
+  function updateModeIndicator(type) {
+    const indicators = document.querySelectorAll('.mode-indicator');
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+    let indicatorClass;
+    switch(type) {
+      case 'easy': indicatorClass = 'easy-indicator'; break;
+      case 'normal': indicatorClass = 'normal-indicator'; break;
+      case 'hard': indicatorClass = 'hard-indicator'; break;
+      default: return; // 真心话和大冒险不激活模式指示器
+    }
+
+    document.querySelector(`.${indicatorClass}`).classList.add('active');
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    const duration = parseInt(document.getElementById('timerDuration').value) || 30;
+    let seconds = duration;
+    const timerElement = document.getElementById('timer');
+    timerElement.style.display = 'block';
+    timerElement.classList.remove('warning');
+    updateTimerDisplay(seconds);
+
+    timerInterval = setInterval(() => {
+      seconds--;
+      updateTimerDisplay(seconds);
+
+      if (seconds <= 10) {
+        timerElement.classList.add('warning');
+        // 添加震动反馈（如果设备支持）
+        if ("vibrate" in navigator) {
+          navigator.vibrate(100);
+        }
+      }
+
+      if (seconds <= 0) {
+        clearInterval(timerInterval);
+        timerElement.textContent = '时间到！';
+        timerElement.classList.add('warning');
+        // 时间到震动提醒
+        if ("vibrate" in navigator) {
+          navigator.vibrate([300, 200, 300]);
+        }
+        setTimeout(() => {
+          timerElement.style.display = 'none';
+        }, 3000);
+      }
+    }, 1000);
+  }
+
+  function updateTimerDisplay(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    document.getElementById('timer').textContent =
+      `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  function addToHistory(text, type) {
+    history.unshift({text, type, timestamp: new Date()});
+    if (history.length > 15) history.pop();
+
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const historyHtml = history
+      .map((item, index) => {
+        let tagClass, tagText;
+        switch(item.type) {
+          case 'truth':
+            tagClass = 'tag-truth';
+            tagText = '真心话';
+            break;
+          case 'dare':
+            tagClass = 'tag-dare';
+            tagText = '大冒险';
+            break;
+          case 'easy':
+            tagClass = 'tag-easy';
+            tagText = '简单';
+            break;
+          case 'normal':
+            tagClass = 'tag-normal';
+            tagText = '一般';
+            break;
+          case 'hard':
+            tagClass = 'tag-hard';
+            tagText = '地狱';
+            break;
+          default:
+            tagClass = 'tag-truth';
+            tagText = '真心话';
+        }
+
+        const timeStr = item.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        return `
+            <div class="history-item">
+              <strong>${timeStr}</strong> - ${item.text}
+              <span class="mode-tag ${tagClass}">${tagText}</span>
+            </div>
+          `;
+      })
+      .join('');
+
+    document.getElementById('history').innerHTML = historyHtml;
+  }
+
+  function toggleHistory(event) {
+    event.preventDefault();
+    const panel = document.getElementById('historyPanel');
+    panel.classList.toggle('active');
+
+    // 如果打开历史面板，确保内容是最新的
+    if (panel.classList.contains('active')) {
+      renderHistory();
+    }
+  }
+
+  // 初始化
+  document.addEventListener('DOMContentLoaded', function() {
+    // 初始化倒计时显示
+    const timerEnabled = document.getElementById('timerEnabled');
+    const timerElement = document.getElementById('timer');
+
+    timerEnabled.addEventListener('change', function() {
+      timerElement.style.display = this.checked ? 'block' : 'none';
+      if (!this.checked) {
+        clearInterval(timerInterval);
+      }
+    });
+
+    // 初始化历史记录
+    renderHistory();
+
+    // 默认显示地狱模式指示器为激活状态
+    updateModeIndicator('hard');
+
+    // 初始化倒计时显示
+    updateTimerDisplay(parseInt(document.getElementById('timerDuration').value) || 30);
+  });
+</script>
+</body>
+</html>
