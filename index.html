@@ -8,6 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    /* 保持原有样式不变 */
     * {
       margin: 0;
       padding: 0;
@@ -562,12 +563,6 @@
   <div class="header">
     <h1><i class="fas fa-gamepad"></i> 真心话大冒险</h1>
     <p>聚会必备游戏！选择不同模式获取问题，简单模式轻松有趣，地狱模式刺激挑战，留下难忘的聚会回忆！</p>
-
-    <!--    <div class="mode-indicators">
-          <div class="mode-indicator easy-indicator">简单模式 - 轻松有趣</div>
-          <div class="mode-indicator normal-indicator">一般模式 - 中等挑战</div>
-          <div class="mode-indicator hard-indicator active">地狱模式 - 刺激冒险</div>
-        </div>-->
   </div>
 
   <div class="settings">
@@ -585,16 +580,16 @@
 
   <div class="buttons">
     <button class="truth" onclick="getQuestion('truth')">
-      <i class="fas fa-heart"></i> 真心话
+      <i class="fas fa-heart"></i> 简单模式
     </button>
     <button class="dare" onclick="getQuestion('dare')">
-      <i class="fas fa-fire"></i> 大冒险
+      <i class="fas fa-fire"></i> 普通模式
     </button>
     <button class="easy" onclick="getQuestion('easy')">
-      <i class="fas fa-smile"></i> 简单模式
+      <i class="fas fa-smile"></i> 一般模式
     </button>
     <button class="normal" onclick="getQuestion('normal')">
-      <i class="fas fa-meh"></i> 一般模式
+      <i class="fas fa-meh"></i> 苦难模式
     </button>
     <button class="hard" onclick="getQuestion('hard')">
       <i class="fas fa-skull"></i> 地狱模式
@@ -619,7 +614,6 @@
 <script>
   // 模拟点击音效 - 适配移动设备
   function playClick() {
-    // 降低音效复杂度，提高移动设备性能
     try {
       const context = new (window.AudioContext || window.webkitAudioContext)();
       const oscillator = context.createOscillator();
@@ -644,51 +638,114 @@
   }
 
   // 问题库
+  //简单模式
   const truthQuestions = [
-    "你最后一次说谎是什么时候？",
-    "你最难忘的一次旅行是哪次？",
-    "你最喜欢的一首歌是什么？",
-    "你最想感谢的人是谁？为什么？",
-    "你最后悔的一件事是什么？",
-    "你最大的梦想是什么？",
-    "你第一次恋爱是什么时候？",
-    "你最害怕什么？",
-    "如果可以重来，你最想改变什么？",
-    "你认为自己最大的优点是什么？"
-  ];
-
-  const dareQuestions = [
-    "模仿一种动物叫声",
-    "唱一首歌的副歌部分",
-    "做一个鬼脸",
+    "学喵叫三声",
+    "一起恶搞自拍",
+    "给对方说悄悄话",
+    "手牵手30秒",
+    "拥抱30秒",
+    "对视5秒",
+    "尝试接吻的感觉",
+    "说说初次见面的感觉",
+    "手牵手一分钟",
+    "前进三格",
+    "一起给对方按摩",
+    "摸对方耳朵2秒",
+    "给对方唱首歌",
+    "一起喝一杯水",
+    "尝试接吻的感觉",
+    "对方站着自己跪着喂食物",
+    "给对方按摩捶背一分钟",
     "学猫叫三声",
-    "即兴跳舞30秒",
-    "模仿在场一个人的说话方式",
-    "用夸张的表情讲述今天发生的一件事",
-    "做三个俯卧撑",
-    "闭着眼睛画一只猫",
-    "用rap方式介绍自己"
+    "对视5秒",
+    "一起恶搞自拍"
   ];
 
-  // 新增模式问题库
+  //普通模式
+  const dareQuestions = [
+    "自拍一段接吻小视频",
+    "脱光衣服【可要求穿情趣内衣】",
+    "对方舔你上半身的各个部位超过30秒",
+    "依次亲吻对方的额头，鼻子，嘴唇，脖子",
+    "跪舔对方（对方）30秒",
+    "舔或轻咬对方耳垂5下",
+    "亲吻对方大腿内侧10秒",
+    "舔对方的脖子到胸口30秒",
+    "被对手伸进裤子随便摸30秒",
+    "摸对方胸部或打屁股一下",
+    "和对方深情接吻30秒",
+  ];
+
+  //一般模式
   const easyQuestions = [
-    "情感挖掘机：最近一次让你心跳加速（小鹿乱撞）的时刻是因为什么事/什么人？",
-    "后悔坦白局：你说过最后悔的一句话是什么？现在想对听到的人说什么？",
-    "社死回忆：你做过最“脚趾抠地”的尴尬事是什么？（求细节！）"
+    "后入插入20次不许射并拍视频留念",
+    "跟对方乳交30秒",
+    "被对手用牙齿咬住乳头磨蹭10秒",
+    "自己使用按摩棒按摩私处2分钟",
+    "对方穿上指定情趣内衣",
+    "口交将精液留在对手嘴里并舔干净吃掉",
+    "拍一段给对方口交的视频",
+    "对着镜子拍摄搜胸视频20秒",
+    "用嘴含住对手蛋蛋或阴蒂30秒",
+    "舔对手的脚30秒",
+    "对方给你口指定部位1分钟",
+    "选择一个自己喜欢的姿势，让对方插1分钟"
+
+
   ];
 
+  //困难
   const normalQuestions = [
-    "秘密技能：你有什么不为人知的“奇怪特长”？比如动耳朵、舌头卷成花…",
-    "灵魂拷问：如果在场的人中必须选一个和你荒岛求生，你会选谁？为什么？（损友预警！）",
-    "沉浸式表演：用三种不同语气说：“人家拿小拳拳捶你胸口！”（撒娇/愤怒/机器人）"
+    "用捆绑器捆住对方并用皮鞭抽打一分钟",
+    "坐到对方脸上让对方吸吮30秒",
+    "给对方下体倒酸奶并添干",
+    "张开嘴让对方下体磨蹭30秒",
+    "【隐藏款】拴狗绳跪在对方面前口交和乳交3分钟并拍视频",
+    "用跳蛋按摩一分钟并拔掉一根毛",
+    "进行69式3分钟",
+    "用捆绳捆住并让对方为所欲为3分钟",
+    "拴上十字扣抽插一分钟不许射",
+    "吸吮对方脚趾30秒",
+    "【隐藏款】撅起屁屁让对方舔下面60秒",
+    "皮鞭抽胸10下",
+    "观音坐莲抽插3分钟",
+    "按在地板抽插1分钟",
+    "用B或JJ蹭脸10秒",
+    "皮鞭抽屁股30秒并拍视频",
+    "给对方戴眼罩任由自己宰割5分钟",
+    "捆绑拉到卫生间淋湿",
+    "被对方随意指定一项任务",
+
+
   ];
 
+  //地狱模式
   const hardQuestions = [
-    "综艺附体：原地模仿一个经典表情包动作（比如“地铁老人看手机”），让大家猜！",
-    "土味情话王：挑一位异性（或同性），用油腻霸总口吻说：“女人/男人，你成功引起了我的注意！”",
-    "方言暴击：用家乡方言大声朗读：“红鲤鱼与绿鲤鱼与驴”（不会？现学！）",
-    "灵魂画手：蒙眼画出一只猪，并命名为“在场某人的昵称+猪”！（例：《小明的飞天猪》）"
+    "【隐藏款】带上远程跳蛋去逛街并随机开启（时长不限）",
+    "使用全套的调情工具20分钟并拍摄视频",
+    "在插入和时候给朋友或前男友打电话（至少一分钟）",
+    "【隐藏款】戴上指定的sm器具，打开酒店房门，屁股对着外面跪下，20秒",
+    "在浴室做爱一次并拍视频",
+    "女生使用任意方式让男生舒服一次",
+    "小女仆一边玩游戏一边被后入",
+    "小女仆选一个地方被种草莓",
+    "小女仆被绑在飘窗处调教三分钟并拍视频",
+    "床上用手自慰20秒",
+    "在阳台全裸被主人后入10次",
+    "小女仆带指定道具跪着舔脚1分钟",
+    "【隐藏奖励】小女仆自己决定被操体位",
+    "进行一次肛交"
   ];
+
+  // 新增：跟踪每个模式已使用的问题索引
+  const usedIndices = {
+    truth: [],
+    dare: [],
+    easy: [],
+    normal: [],
+    hard: []
+  };
 
   let timerInterval;
   const history = [];
@@ -728,7 +785,26 @@
         modeName = "真心话";
     }
 
-    const randomIndex = Math.floor(Math.random() * questions.length);
+    // 核心修改：获取不重复的问题索引
+    let randomIndex;
+    // 如果所有问题都已使用过，重置已使用索引数组
+    if (usedIndices[type].length >= questions.length) {
+      usedIndices[type] = []; // 重置
+    }
+
+    // 筛选出未使用的问题索引
+    const availableIndices = [];
+    for (let i = 0; i < questions.length; i++) {
+      if (!usedIndices[type].includes(i)) {
+        availableIndices.push(i);
+      }
+    }
+
+    // 从可用索引中随机选择一个
+    randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    // 将选中的索引添加到已使用数组
+    usedIndices[type].push(randomIndex);
+
     const question = questions[randomIndex];
 
     const questionBox = document.getElementById('question');
@@ -766,7 +842,9 @@
       default: return; // 真心话和大冒险不激活模式指示器
     }
 
-    document.querySelector(`.${indicatorClass}`).classList.add('active');
+    // 如果存在该指示器则激活
+    const indicator = document.querySelector(`.${indicatorClass}`);
+    if (indicator) indicator.classList.add('active');
   }
 
   function startTimer() {
@@ -888,9 +966,6 @@
 
     // 初始化历史记录
     renderHistory();
-
-    // 默认显示地狱模式指示器为激活状态
-    updateModeIndicator('hard');
 
     // 初始化倒计时显示
     updateTimerDisplay(parseInt(document.getElementById('timerDuration').value) || 30);
