@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1a2a6c">
-  <title>真心话大冒险 - 多模式升级版</title>
+  <title>情侣大冒险 - 多模式升级版</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -561,8 +561,8 @@
 <body>
 <div class="container">
   <div class="header">
-    <h1><i class="fas fa-gamepad"></i> 真心话大冒险</h1>
-    <p>聚会必备游戏！选择不同模式获取问题，简单模式轻松有趣，地狱模式刺激挑战，留下难忘的聚会回忆！</p>
+    <h1><i class="fas fa-gamepad"></i> 情侣大冒险</h1>
+    <p>约会必备游戏！选择不同模式获取挑战，简单模式轻松有趣，地狱模式刺激挑战！<br>在这里留下彼此间的美好回忆吧！</p>
   </div>
 
   <div class="settings">
@@ -892,7 +892,7 @@
 
   function addToHistory(text, type) {
     history.unshift({text, type, timestamp: new Date()});
-    if (history.length > 15) history.pop();
+    if (history.length > 100) history.pop();
 
     renderHistory();
   }
