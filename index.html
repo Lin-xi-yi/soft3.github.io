@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* 保持原有样式不变 */
+    /* 原有样式保持不变 */
     * {
       margin: 0;
       padding: 0;
@@ -25,6 +25,37 @@
       padding: 15px;
       color: #333;
       overflow-x: hidden;
+      transition: background 0.5s ease;
+    }
+
+    /* 新增：主题相关样式 */
+    body.theme-romantic {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4);
+    }
+
+    /* 动态激情主题 - 多种颜色不断变换 */
+    /* 动态激情主题 - 20种适合情侣的颜色不断变换 */
+    body.theme-funny {
+      background: linear-gradient(
+        135deg,
+        #ff3e6c, #ff512f, #ff7d00, #f09819, #ffc107,
+        #fff059, #dce775, #aed581, #66bb6a, #34e89e,
+        #26a69a, #00f2fe, #29b6f6, #488aff, #5c6bc0,
+        #7f00ff, #b39ddb, #f06292, #ff0080, #c2185b
+      );
+      background-size: 1200% 1200%;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    /* 渐变动画 - 让颜色平滑过渡 */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body.theme-classic {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
     }
 
     .container {
@@ -82,6 +113,36 @@
       max-width: 600px;
       margin: 15px auto;
       line-height: 1.6;
+    }
+
+    /* 玩家切换样式 */
+    .player-switch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 15px 0;
+      gap: 15px;
+    }
+
+    .player {
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .player.active {
+      border-color: #1a2a6c;
+      background-color: rgba(26, 42, 108, 0.1);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(26, 42, 108, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(26, 42, 108, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(26, 42, 108, 0); }
     }
 
     .mode-indicators {
@@ -145,11 +206,28 @@
       box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     }
 
+    /* 问题框左上角模式标签样式 */
     .question-box::before {
-      content: ""attr(data-mode)"";
+      content: "" attr(data-mode) "";  /* 从data-mode属性获取内容 */
+      position: absolute;
+      top: -12px;                     /* 定位到框外上方 */
+      left: 20px;                     /* 距离左侧20px */
+      background: #1a2a6c;            /* 深蓝色背景 */
+      color: white;                   /* 白色文字 */
+      padding: 5px 15px;              /* 内边距 */
+      border-radius: 20px;            /* 圆角 */
+      font-size: 0.8rem;              /* 字体大小 */
+      font-weight: bold;              /* 粗体 */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+      z-index: 10;                    /* 确保显示在最上层 */
+    }
+
+    /* 当前玩家指示器 - 居中显示 */
+    .current-player-indicator {
       position: absolute;
       top: -12px;
-      left: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       background: #1a2a6c;
       color: white;
       padding: 5px 15px;
@@ -157,6 +235,37 @@
       font-size: 0.8rem;
       font-weight: bold;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 5;
+    }
+
+    .player-a-indicator {
+      background: #1565c0;
+    }
+
+    .player-b-indicator {
+      background: #c62828;
+    }
+
+    /* 惊喜提示样式 */
+    .surprise-indicator {
+      position: absolute;
+      top: -10px;
+      right: 20px;
+      background: linear-gradient(45deg, #FF4081, #F50057);
+      color: white;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      animation: flash 1.5s infinite;
+      z-index: 10;
+    }
+
+    @keyframes flash {
+      0% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 0.7; }
     }
 
     .settings {
@@ -295,6 +404,30 @@
       color: white;
     }
 
+    /* 评分按钮样式 */
+    .rating-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .rating-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 0;
+      min-width: auto;
+      background: #eee;
+      color: #666;
+      font-size: 1.2rem;
+    }
+
+    .rating-btn.active {
+      background: linear-gradient(45deg, #FFC107, #FF9800);
+      color: white;
+    }
+
     .history-container {
       display: flex;
       justify-content: center;
@@ -337,7 +470,6 @@
       transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       overflow-y: auto;
       z-index: 1000;
-      /* 关键：使用flex布局使内部元素垂直排列 */
       display: flex;
       flex-direction: column;
     }
@@ -353,7 +485,6 @@
       margin-bottom: 15px;
       padding-bottom: 12px;
       border-bottom: 2px solid #f0f0f0;
-      /* 固定头部不滚动 */
       position: sticky;
       top: 0;
       background: white;
@@ -389,11 +520,12 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.15);
     }
 
-    /* 历史记录内容区域 */
+    /* 历史记录内容区域 - 调整间距和位置 */
     #history {
-      flex-grow: 1; /* 自动填充剩余空间，使内容可滚动 */
-      margin-bottom: 20px; /* 与底部按钮保持距离 */
-      padding-top: 10px; /* 避免内容与固定头部重叠 */
+      flex-grow: 1;
+      margin: 20px 0 30px 0; /* 顶部和底部添加间距 */
+      padding: 0 5px; /* 左右内边距，使内容不贴边 */
+      overflow-y: auto; /* 确保内容过多时可以滚动 */
     }
 
     .history-item {
@@ -465,7 +597,28 @@
       color: white;
     }
 
-    /* 清空历史记录按钮（已修复） */
+    /* 玩家标签 */
+    .player-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      margin-right: 5px;
+      background: #e0e0e0;
+      color: #555;
+    }
+
+    .player-a {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .player-b {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    /* 清空历史记录按钮 - 确保在底部并与内容有间距 */
     .clear-history {
       background: linear-gradient(45deg, #f44336, #c62828);
       color: white;
@@ -480,9 +633,8 @@
       justify-content: center;
       gap: 8px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      /* 关键：通过flex布局固定在面板底部 */
-      margin-top: auto; /* 自动推到容器底部 */
-      width: 100%; /* 适应面板宽度 */
+      margin-top: auto; /* 自动推到最底部 */
+      width: 100%;
       position: sticky;
       bottom: 20px;
     }
@@ -513,6 +665,182 @@
 
     .question-animation {
       animation: questionIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* 自定义问题模态框 */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h3 {
+      color: #1a2a6c;
+      margin: 0;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0;
+      min-width: auto;
+      box-shadow: none;
+    }
+
+    .modal-body {
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #555;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* 主题选择器 */
+    .theme-selector {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+      justify-content: center;
+    }
+
+    .theme-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      padding: 0;
+      min-width: auto;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .theme-classic {
+      background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+    }
+
+    .theme-romantic {
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    }
+
+    /* 动态激情主题按钮 - 多种颜色变换 */
+    .theme-funny {
+      background: linear-gradient(
+        135deg,
+        #ff512f, #f09819, #fff059,
+        #34e89e, #00f2fe, #488aff,
+        #7f00ff, #ff0080
+      );
+      background-size: 600% 600%;
+      animation: gradientShift 10s ease infinite;
+    }
+
+    /* 统计面板 */
+    .stats-panel {
+      padding: 15px;
+      background: rgba(245, 245, 245, 0.8);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .stats-header h3 {
+      font-size: 1rem;
+      color: #1a2a6c;
+      margin: 0;
+    }
+
+    .stats-content {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .stat-item {
+      text-align: center;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1a2a6c;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #666;
     }
 
     /* 响应式调整 */
@@ -619,11 +947,45 @@
     }
   </style>
 </head>
-<body>
+<body class="theme-classic">
 <div class="container">
   <div class="header">
-    <h1><i class="fas fa-gamepad"></i> 情侣大冒险</h1>
+    <h1><i class="fas fa-gamepad"></i> 鹏❤祯的秘密世界</h1>
     <p>约会必备游戏！选择不同模式获取挑战，简单模式轻松有趣，地狱模式刺激挑战！<br>在这里留下彼此间的美好回忆吧！</p>
+
+    <!-- 玩家切换 -->
+    <div class="player-switch">
+      <div class="player player-a active" onclick="switchPlayer('A')">玩家 A</div>
+      <div class="player player-b" onclick="switchPlayer('B')">玩家 B</div>
+    </div>
+
+    <!-- 主题选择 -->
+    <div class="theme-selector">
+      <button class="theme-btn theme-classic active" title="经典主题" onclick="changeTheme('classic')"></button>
+      <button class="theme-btn theme-romantic" title="浪漫主题" onclick="changeTheme('romantic')"></button>
+      <button class="theme-btn theme-funny" title="激情主题" onclick="changeTheme('funny')"></button>
+    </div>
+  </div>
+
+  <!-- 游戏统计 -->
+  <div class="stats-panel">
+    <div class="stats-header">
+      <h3><i class="fas fa-chart-pie"></i> 游戏统计</h3>
+    </div>
+    <div class="stats-content">
+      <div class="stat-item">
+        <div class="stat-value" id="totalGames">0</div>
+        <div class="stat-label">总挑战数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="playerAStats">0</div>
+        <div class="stat-label">玩家A完成</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value" id="playerBStats">0</div>
+        <div class="stat-label">玩家B完成</div>
+      </div>
+    </div>
   </div>
 
   <div class="settings">
@@ -635,8 +997,19 @@
     <div class="timer" id="timer">00:30</div>
   </div>
 
-  <div class="question-box" id="question" data-mode="地狱模式">
+  <div class="question-box" id="question" data-mode="">
+    <!-- 玩家指示器 -->
+    <div class="current-player-indicator player-a-indicator">玩家 A</div>
     点击下方按钮开始游戏，挑战不同模式！
+  </div>
+
+  <!-- 评分按钮 -->
+  <div class="rating-buttons" id="ratingButtons" style="display: none;">
+    <button class="rating-btn" onclick="rateChallenge(1)"><i class="fas fa-star"></i></button>
+    <button class="rating-btn" onclick="rateChallenge(2)"><i class="fas fa-star"></i></button>
+    <button class="rating-btn" onclick="rateChallenge(3)"><i class="fas fa-star"></i></button>
+    <button class="rating-btn" onclick="rateChallenge(4)"><i class="fas fa-star"></i></button>
+    <button class="rating-btn" onclick="rateChallenge(5)"><i class="fas fa-star"></i></button>
   </div>
 
   <div class="buttons">
@@ -650,10 +1023,18 @@
       <i class="fas fa-smile"></i> 一般模式
     </button>
     <button class="normal" onclick="getQuestion('normal')">
-      <i class="fas fa-meh"></i> 苦难模式
+      <i class="fas fa-meh"></i> 困难模式
     </button>
     <button class="hard" onclick="getQuestion('hard')">
       <i class="fas fa-skull"></i> 地狱模式
+    </button>
+    <!-- 自定义问题按钮 -->
+    <button class="easy" onclick="openCustomQuestionModal()">
+      <i class="fas fa-plus-circle"></i> 自定义问题
+    </button>
+    <!-- 分享按钮 -->
+    <button class="normal" onclick="shareResults()">
+      <i class="fas fa-share-alt"></i> 分享
     </button>
   </div>
 
@@ -670,10 +1051,39 @@
     <button class="close-history" onclick="toggleHistory(event)">×</button>
   </div>
   <div id="history"></div>
-  <!-- 清空历史记录按钮 -->
   <button class="clear-history" onclick="clearHistory()">
     <i class="fas fa-trash"></i> 清空历史记录
   </button>
+</div>
+
+<!-- 自定义问题模态框 -->
+<div class="modal" id="customQuestionModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3><i class="fas fa-plus-circle"></i> 添加自定义问题</h3>
+      <button class="close-modal" onclick="closeCustomQuestionModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="questionText">问题内容</label>
+        <textarea id="questionText" class="form-control" placeholder="输入你的自定义问题..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="questionType">问题类型</label>
+        <select id="questionType" class="form-control">
+          <option value="truth">简单</option>
+          <option value="dare">普通</option>
+          <option value="easy">一般</option>
+          <option value="normal">困难</option>
+          <option value="hard">地狱</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="easy" onclick="closeCustomQuestionModal()">取消</button>
+      <button class="dare" onclick="addCustomQuestion()">添加</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -697,6 +1107,35 @@
       setTimeout(() => {
         oscillator.stop();
       }, 100);
+    } catch(e) {
+      // 静音失败时不做处理
+    }
+  }
+
+  // 成功音效
+  function playSuccessSound() {
+    try {
+      const context = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = context.createOscillator();
+      const gainNode = context.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(context.destination);
+
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 659.25; // E5
+      gainNode.gain.value = 0.2;
+
+      oscillator.start();
+      gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.3);
+
+      setTimeout(() => {
+        oscillator.frequency.value = 783.99; // G5
+      }, 100);
+
+      setTimeout(() => {
+        oscillator.stop();
+      }, 300);
     } catch(e) {
       // 静音失败时不做处理
     }
@@ -796,10 +1235,10 @@
     "小女仆一边玩游戏一边被后入",
     "小女仆选一个地方被种草莓",
     "小女仆被绑在飘窗处调教三分钟并拍视频",
-    "床上用手自慰20秒",
-    "在阳台全裸被主人后入10次",
+    "使用分腿器并用指定姿势被艹到高潮",
+    "在阳台全裸被主人后入30次",
     "小女仆带指定道具跪着舔脚1分钟",
-    "【隐藏奖励】小女仆自己决定被操体位",
+    "【隐藏奖励】小女仆自己决定被艹体位",
     "进行一次肛交"
   ];
 
@@ -815,11 +1254,73 @@
   let timerInterval;
   // 确保history数组是全局可访问的
   window.gameHistory = [];
+  // 当前玩家
+  let currentPlayer = 'A';
+  // 当前挑战ID，用于评分
+  let currentChallengeId = null;
+  // 游戏统计
+  let gameStats = {
+    totalGames: 0,
+    playerA: 0,
+    playerB: 0
+  };
 
   // 防止双击缩放
   document.addEventListener('dblclick', function(event) {
     event.preventDefault();
   }, { passive: false });
+
+  // 设置模式标签的函数
+  function setModeLabel(modeName) {
+    const questionBox = document.getElementById('question');
+    questionBox.dataset.mode = modeName + "模式";
+
+    // 添加动画效果
+    questionBox.classList.remove('question-animation');
+    setTimeout(() => {
+      questionBox.classList.add('question-animation');
+    }, 10);
+  }
+
+  // 切换玩家
+  function switchPlayer(player) {
+    playClick();
+    currentPlayer = player;
+
+    // 更新UI
+    document.querySelectorAll('.player').forEach(el => {
+      el.classList.remove('active');
+    });
+    document.querySelector(`.player-${player.toLowerCase()}`).classList.add('active');
+
+    // 更新当前玩家指示器
+    const indicator = document.querySelector('.current-player-indicator');
+    indicator.textContent = `玩家 ${player}`;
+    indicator.className = 'current-player-indicator';
+    indicator.classList.add(`player-${player.toLowerCase()}-indicator`);
+  }
+
+  // 自动切换玩家
+  function autoSwitchPlayer() {
+    currentPlayer = currentPlayer === 'A' ? 'B' : 'A';
+    switchPlayer(currentPlayer);
+  }
+
+  // 主题切换
+  function changeTheme(theme) {
+    playClick();
+    document.body.className = '';
+    document.body.classList.add(`theme-${theme}`);
+
+    // 更新主题按钮状态
+    document.querySelectorAll('.theme-btn').forEach(el => {
+      el.classList.remove('active');
+    });
+    document.querySelector(`.theme-${theme}`).classList.add('active');
+
+    // 保存主题偏好
+    localStorage.setItem('coupleAdventureTheme', theme);
+  }
 
   function getQuestion(type) {
     playClick();
@@ -828,19 +1329,19 @@
     switch(type) {
       case 'truth':
         questions = truthQuestions;
-        modeName = "真心话";
+        modeName = "简单";
         break;
       case 'dare':
         questions = dareQuestions;
-        modeName = "大冒险";
+        modeName = "普通";
         break;
       case 'easy':
         questions = easyQuestions;
-        modeName = "简单";
+        modeName = "一般";
         break;
       case 'normal':
         questions = normalQuestions;
-        modeName = "一般";
+        modeName = "困难";
         break;
       case 'hard':
         questions = hardQuestions;
@@ -848,8 +1349,11 @@
         break;
       default:
         questions = truthQuestions;
-        modeName = "真心话";
+        modeName = "简单";
     }
+
+    // 设置模式标签
+    setModeLabel(modeName);
 
     // 获取不重复的问题索引
     let randomIndex;
@@ -867,17 +1371,95 @@
 
     const question = questions[randomIndex];
     const questionBox = document.getElementById('question');
-    questionBox.dataset.mode = modeName + "模式";
+
+    // 清除之前的惊喜标记
+    const existingSurprise = questionBox.querySelector('.surprise-indicator');
+    if (existingSurprise) {
+      existingSurprise.remove();
+    }
+
+    // 更新问题显示，只显示问题内容
+    questionBox.innerHTML = `
+      <!-- 玩家指示器 -->
+      <div class="current-player-indicator player-${currentPlayer.toLowerCase()}-indicator">玩家 ${currentPlayer}</div>
+      ${question}
+    `;
+
     questionBox.classList.remove('question-animation');
     setTimeout(() => {
       questionBox.classList.add('question-animation');
     }, 10);
-    questionBox.textContent = question;
+
+    // 随机惊喜事件 (10%概率)
+    if (Math.random() < 0.1) {
+      const surpriseIndicator = document.createElement('div');
+      surpriseIndicator.className = 'surprise-indicator';
+      surpriseIndicator.textContent = '惊喜任务!';
+      questionBox.appendChild(surpriseIndicator);
+    }
+
+    // 记录当前挑战ID，用于评分
+    currentChallengeId = Date.now();
+
+    // 显示评分按钮
+    document.getElementById('ratingButtons').style.display = 'flex';
 
     addToHistory(question, type);
+
     if (document.getElementById('timerEnabled').checked) {
       startTimer();
     }
+  }
+
+  // 评分功能
+  function rateChallenge(rating) {
+    playSuccessSound();
+
+    // 更新评分按钮UI
+    document.querySelectorAll('.rating-btn').forEach((btn, index) => {
+      if (index < rating) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // 更新历史记录中的评分
+    const challengeIndex = window.gameHistory.findIndex(item => item.id === currentChallengeId);
+    if (challengeIndex !== -1) {
+      window.gameHistory[challengeIndex].rating = rating;
+      renderHistory();
+
+      // 更新统计数据
+      gameStats.totalGames++;
+      if (currentPlayer === 'A') {
+        gameStats.playerA++;
+      } else {
+        gameStats.playerB++;
+      }
+      updateStats();
+
+      // 评分后自动切换玩家
+      setTimeout(autoSwitchPlayer, 1000);
+    }
+
+    // 2秒后隐藏评分按钮
+    setTimeout(() => {
+      document.getElementById('ratingButtons').style.display = 'none';
+      document.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+    }, 2000);
+  }
+
+  // 更新统计数据
+  function updateStats() {
+    document.getElementById('totalGames').textContent = gameStats.totalGames;
+    document.getElementById('playerAStats').textContent = gameStats.playerA;
+    document.getElementById('playerBStats').textContent = gameStats.playerB;
+
+    // 保存统计数据
+    localStorage.setItem('coupleAdventureStats', JSON.stringify(gameStats));
   }
 
   function updateModeIndicator(type) {
@@ -937,10 +1519,21 @@
   }
 
   function addToHistory(text, type) {
-    // 使用全局可访问的数组
-    window.gameHistory.unshift({text, type, timestamp: new Date()});
+    // 使用全局可访问的数组，添加ID和玩家信息
+    window.gameHistory.unshift({
+      id: currentChallengeId,
+      text,
+      type,
+      timestamp: new Date(),
+      player: currentPlayer,
+      rating: null // 初始无评分
+    });
+
     if (window.gameHistory.length > 100) window.gameHistory.pop();
     renderHistory();
+
+    // 保存历史记录到本地存储
+    saveHistory();
   }
 
   function renderHistory() {
@@ -959,19 +1552,19 @@
         switch(item.type) {
           case 'truth':
             tagClass = 'tag-truth';
-            tagText = '真心话';
+            tagText = '简单';
             break;
           case 'dare':
             tagClass = 'tag-dare';
-            tagText = '大冒险';
+            tagText = '普通';
             break;
           case 'easy':
             tagClass = 'tag-easy';
-            tagText = '简单';
+            tagText = '一般';
             break;
           case 'normal':
             tagClass = 'tag-normal';
-            tagText = '一般';
+            tagText = '困难';
             break;
           case 'hard':
             tagClass = 'tag-hard';
@@ -979,13 +1572,30 @@
             break;
           default:
             tagClass = 'tag-truth';
-            tagText = '真心话';
+            tagText = '简单';
         }
+
+        // 评分星星显示
+        let ratingHtml = '';
+        if (item.rating !== null) {
+          ratingHtml = '<div class="rating">';
+          for (let i = 1; i <= 5; i++) {
+            if (i <= item.rating) {
+              ratingHtml += '<i class="fas fa-star" style="color: #FFC107; font-size: 0.8rem;"></i>';
+            } else {
+              ratingHtml += '<i class="far fa-star" style="color: #ddd; font-size: 0.8rem;"></i>';
+            }
+          }
+          ratingHtml += '</div>';
+        }
+
         const timeStr = item.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         return `
           <div class="history-item">
+            <span class="player-tag player-${item.player.toLowerCase()}">玩家${item.player}</span>
             <strong>${timeStr}</strong> - ${item.text}
             <span class="mode-tag ${tagClass}">${tagText}</span>
+            ${ratingHtml}
           </div>
         `;
       })
@@ -994,14 +1604,165 @@
     historyElement.innerHTML = historyHtml;
   }
 
-  // 修复清空历史记录功能
+  // 清空历史记录功能
   function clearHistory() {
     if (confirm('确定要清空所有历史记录吗？此操作不可恢复。')) {
       // 直接清空全局历史记录数组
       window.gameHistory = [];
+      // 重置统计数据
+      gameStats = {
+        totalGames: 0,
+        playerA: 0,
+        playerB: 0
+      };
+      updateStats();
       // 直接更新DOM，确保显示空状态
       document.getElementById('history').innerHTML = '<div class="empty-history"><i class="fas fa-info-circle"></i> 暂无历史记录</div>';
+      // 清除本地存储
+      localStorage.removeItem('coupleAdventureHistory');
       playClick();
+    }
+  }
+
+  // 保存历史记录到本地存储
+  function saveHistory() {
+    try {
+      localStorage.setItem('coupleAdventureHistory', JSON.stringify(window.gameHistory));
+    } catch(e) {
+      console.error('保存历史记录失败:', e);
+    }
+  }
+
+  // 从本地存储加载历史记录
+  function loadHistory() {
+    try {
+      const savedHistory = localStorage.getItem('coupleAdventureHistory');
+      if (savedHistory) {
+        window.gameHistory = JSON.parse(savedHistory);
+        // 转换时间戳为Date对象
+        window.gameHistory.forEach(item => {
+          item.timestamp = new Date(item.timestamp);
+        });
+        return true;
+      }
+    } catch(e) {
+      console.error('加载历史记录失败:', e);
+    }
+    return false;
+  }
+
+  // 打开自定义问题模态框
+  function openCustomQuestionModal() {
+    playClick();
+    document.getElementById('customQuestionModal').classList.add('active');
+    document.getElementById('questionText').focus();
+  }
+
+  // 关闭自定义问题模态框
+  function closeCustomQuestionModal() {
+    playClick();
+    document.getElementById('customQuestionModal').classList.remove('active');
+    document.getElementById('questionText').value = '';
+  }
+
+  // 添加自定义问题
+  function addCustomQuestion() {
+    const questionText = document.getElementById('questionText').value.trim();
+    const questionType = document.getElementById('questionType').value;
+
+    if (!questionText) {
+      alert('请输入问题内容');
+      return;
+    }
+
+    // 添加到相应的问题库
+    switch(questionType) {
+      case 'truth':
+        truthQuestions.push(questionText);
+        break;
+      case 'dare':
+        dareQuestions.push(questionText);
+        break;
+      case 'easy':
+        easyQuestions.push(questionText);
+        break;
+      case 'normal':
+        normalQuestions.push(questionText);
+        break;
+      case 'hard':
+        hardQuestions.push(questionText);
+        break;
+    }
+
+    // 保存自定义问题到本地存储
+    saveCustomQuestions();
+
+    playSuccessSound();
+    alert('自定义问题添加成功！');
+    closeCustomQuestionModal();
+  }
+
+  // 保存自定义问题
+  function saveCustomQuestions() {
+    try {
+      const customQuestions = {
+        truth: truthQuestions,
+        dare: dareQuestions,
+        easy: easyQuestions,
+        normal: normalQuestions,
+        hard: hardQuestions
+      };
+      localStorage.setItem('coupleAdventureCustomQuestions', JSON.stringify(customQuestions));
+    } catch(e) {
+      console.error('保存自定义问题失败:', e);
+    }
+  }
+
+  // 加载自定义问题
+  function loadCustomQuestions() {
+    try {
+      const savedQuestions = localStorage.getItem('coupleAdventureCustomQuestions');
+      if (savedQuestions) {
+        const customQuestions = JSON.parse(savedQuestions);
+        truthQuestions = customQuestions.truth || truthQuestions;
+        dareQuestions = customQuestions.dare || dareQuestions;
+        easyQuestions = customQuestions.easy || easyQuestions;
+        normalQuestions = customQuestions.normal || normalQuestions;
+        hardQuestions = customQuestions.hard || hardQuestions;
+        return true;
+      }
+    } catch(e) {
+      console.error('加载自定义问题失败:', e);
+    }
+    return false;
+  }
+
+  // 分享功能
+  function shareResults() {
+    playClick();
+
+    if (window.gameHistory.length === 0) {
+      alert('还没有游戏记录可以分享哦！');
+      return;
+    }
+
+    // 生成分享文本
+    const shareText = `我们在情侣大冒险中完成了${gameStats.totalGames}个挑战！\n快来加入我们一起玩这个有趣的游戏吧！`;
+
+    // 检查是否支持Web Share API
+    if (navigator.share) {
+      navigator.share({
+        title: '情侣大冒险',
+        text: shareText,
+        url: window.location.href
+      }).catch((error) => console.log('分享失败:', error));
+    } else {
+      // 不支持时复制到剪贴板
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert('分享文本已复制到剪贴板！');
+      }).catch(() => {
+        alert(shareText);
+      });
     }
   }
 
@@ -1026,10 +1787,26 @@
       }
     });
 
+    // 加载保存的历史记录
+    loadHistory();
+    // 加载自定义问题
+    loadCustomQuestions();
+    // 加载统计数据
+    const savedStats = localStorage.getItem('coupleAdventureStats');
+    if (savedStats) {
+      gameStats = JSON.parse(savedStats);
+    }
+    updateStats();
+
+    // 加载保存的主题
+    const savedTheme = localStorage.getItem('coupleAdventureTheme');
+    if (savedTheme) {
+      changeTheme(savedTheme);
+    }
+
     renderHistory();
     updateTimerDisplay(parseInt(document.getElementById('timerDuration').value) || 30);
   });
 </script>
 </body>
 </html>
-
